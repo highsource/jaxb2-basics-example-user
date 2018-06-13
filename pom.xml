@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>zman0900</groupId>
+    <artifactId>jaxb2-basics-example-user</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <ver.java>1.8</ver.java>
+        <!--Notice that user module has upgraded to newer version of jaxb2 basics and plugin, compared to common module-->
+        <ver.jaxb2Basics>0.12.0</ver.jaxb2Basics>
+        <ver.plugin.jaxb2>0.14.0</ver.plugin.jaxb2>
+    </properties>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.12</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jvnet.jaxb2_commons</groupId>
+                <artifactId>jaxb2-basics-runtime</artifactId>
+                <version>${ver.jaxb2Basics}</version>
+            </dependency>
+            <dependency>
+                <groupId>zman0900</groupId>
+                <artifactId>jaxb2-basics-example-common</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jvnet.jaxb2_commons</groupId>
+            <artifactId>jaxb2-basics-runtime</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>zman0900</groupId>
+            <artifactId>jaxb2-basics-example-common</artifactId>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.7.0</version>
+                    <configuration>
+                        <source>${ver.java}</source>
+                        <target>${ver.java}</target>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.21.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.jvnet.jaxb2.maven2</groupId>
+                    <artifactId>maven-jaxb2-plugin</artifactId>
+                    <version>${ver.plugin.jaxb2}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <configuration>
+                    <extension>true</extension>
+                    <strict>false</strict>
+                    <args>
+                        <arg>-mark-generated</arg>
+                        <arg>-XtoString</arg>
+                        <arg>-Xcopyable</arg>
+                        <arg>-XsimpleEquals</arg>
+                        <arg>-XsimpleHashCode</arg>
+                        <arg>-Xsetters</arg>
+                        <arg>-Xsetters-mode=direct</arg>
+                        <arg>-enableIntrospection</arg>
+                        <arg>-npa</arg>
+                    </args>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.jvnet.jaxb2_commons</groupId>
+                            <artifactId>jaxb2-basics</artifactId>
+                            <version>${ver.jaxb2Basics}</version>
+                        </plugin>
+                    </plugins>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>generate-jaxb</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <schemaDirectory>src/main/resources</schemaDirectory>
+                            <schemaIncludes>*.xsd</schemaIncludes>
+                            <catalog>src/main/resources/catalog.cat</catalog>
+                            <episodes>
+                                <episode>
+                                    <groupId>zman0900</groupId>
+                                    <artifactId>jaxb2-basics-example-common</artifactId>
+                                </episode>
+                            </episodes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+        </plugins>
+
+    </build>
+
+</project>
