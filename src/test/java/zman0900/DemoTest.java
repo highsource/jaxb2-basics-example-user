@@ -28,25 +28,41 @@ public class DemoTest {
     }
 
     @Test
-    public void works() {
+    public void localToStringWorks() {
         // This will produce a string include contents of the "Items".
-        tryToString(box);
+        String string = box.toString();
+        assertFalse(string.isEmpty());
+        System.out.println("Working toString: " + string);
     }
 
     @Test
-    public void fails() {
-        // This will cause a NoSuchFieldError.
-        tryToString(i1);
+    public void commonToStringFails() {
+        try {
+            // This will cause a NoSuchFieldError.
+            i1.toString();
+            fail("Exception expected");
+        } catch (NoSuchFieldError e) {
+            System.out.println("toString fails!");
+            e.printStackTrace();
+        }
     }
 
-    private void tryToString(Object obj) {
+    @Test
+    public void localCloneWorks() {
+        Box copy = (Box) box.clone();
+        assertNotSame(box, copy);
+        assertEquals(box, copy);
+    }
+
+    @Test
+    public void commonCloneFails() {
         try {
-            String string = obj.toString();
-            assertFalse(string.isEmpty());
-            System.out.println(string);
+            // This will cause a NoSuchFieldError.
+            i1.clone();
+            fail("Exception expected");
         } catch (NoSuchFieldError e) {
+            System.out.println("clone fails!");
             e.printStackTrace();
-            fail();
         }
     }
 }
